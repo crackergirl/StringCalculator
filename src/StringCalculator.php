@@ -20,6 +20,12 @@ class StringCalculator
             return $this->errorMessageInInvalidSeparators($stringNumbers,',','\n');
 
         }
+
+        if ($this->isThereMissingNumberInLastPosition($stringNumbers,',')){
+
+            return $this->errorMessageInMissingNumberInLastPosition();
+        }
+
         $delimiters = [',', '\n'];
         $stringNumbers = str_replace($delimiters, $delimiters[0], $stringNumbers);
         $splitNumbers = explode($delimiters[0],$stringNumbers);
@@ -51,6 +57,16 @@ class StringCalculator
         $wrongDelimiterPosition  += 1;
         return "Number expected but '$delimiter2' found at position $wrongDelimiterPosition";
 
+    }
+
+    private function isThereMissingNumberInLastPosition(String $yourString,String $separator){
+
+        $lastChar = $yourString[-1];
+        return  ( $lastChar == $separator);
+    }
+    private function errorMessageInMissingNumberInLastPosition(){
+
+        return "Number expected but NOT found";
     }
 
 }
