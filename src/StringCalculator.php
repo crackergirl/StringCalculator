@@ -15,15 +15,9 @@ class StringCalculator
         }
 
 
-        if (strstr($stringNumbers, ',\n') | strstr($stringNumbers, '\n,')) {
-            $pos = strpos($stringNumbers, ',\n');
-            if ( $pos === false){
-                $pos = strpos($stringNumbers, '\n,');
-                return "Number expected but ',' found at position '$pos'";
-            }else{
-                return "Number expected but '\n' found at position '$pos' ";
-            }
+        if ($this->isThereInvalidSeparators($stringNumbers,',','\n')) {
 
+            return $this->errorMessageInInvalidSeparators($stringNumbers,',','\n');
 
         }
         $delimiters = [',', '\n'];
@@ -36,6 +30,26 @@ class StringCalculator
         }
 
         return strval($resultAdd);
+
+    }
+
+    private function isThereInvalidSeparators(String $yourString,String $delimiter1,String $delimiter2){
+        return  (strstr($yourString, $delimiter1.$delimiter2) == true | strstr($yourString, $delimiter2.$delimiter1 ) == true);
+    }
+
+    private function errorMessageInInvalidSeparators(String $yourString,String $delimiter1,String $delimiter2){
+
+        $wrongDelimiterPosition = strpos($yourString, $delimiter1.$delimiter2);
+
+        if ( $wrongDelimiterPosition  === false){
+
+            $wrongDelimiterPosition  = strpos($yourString, $delimiter2.$delimiter1);
+            $wrongDelimiterPosition  += 1;
+            return "Number expected but '$delimiter1' found at position $wrongDelimiterPosition";
+        }
+
+        $wrongDelimiterPosition  += 1;
+        return "Number expected but '$delimiter2' found at position $wrongDelimiterPosition";
 
     }
 

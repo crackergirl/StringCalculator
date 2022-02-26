@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 final class StringCalculatorTest extends TestCase
 {
 
+
     /**
      * @test
      */
@@ -45,6 +46,16 @@ final class StringCalculatorTest extends TestCase
         $stringCalculator = new StringCalculator();
         $result = $stringCalculator->add('0\n1,2,4');
         $this->assertEquals("7", $result);
+    }
+    /**
+     * @test
+     */
+    public function stringNumbersWithInvalidSeparators(){
+
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('0,2,\n4');
+        $delimiter = '\n';
+        $this->assertEquals("Number expected but '$delimiter' found at position 4", $result);
     }
 
 }
