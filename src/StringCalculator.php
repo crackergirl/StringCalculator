@@ -7,13 +7,21 @@ use function PHPUnit\Framework\isEmpty;
 class StringCalculator
 {
 
-    function add(String $numbers):String{
+    function add(String $stringNumbers):String{
 
-        if ($numbers == "") {
+        if ($stringNumbers == "") {
 
             return '0';
         }
-        return $numbers;
+
+        $splitNumbers = explode(",",$stringNumbers);
+
+        $resultAdd = 0;
+        foreach ($splitNumbers as $number) {
+            $resultAdd += intval($number);
+        }
+
+        return strval($resultAdd);
 
     }
 

@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 final class StringCalculatorTest extends TestCase
 {
+
     /**
      * @test
      */
@@ -25,6 +26,16 @@ final class StringCalculatorTest extends TestCase
         $stringCalculator = new StringCalculator();
         $result = $stringCalculator->add("1");
         $this->assertEquals("1", $result);
+    }
+
+    /**
+     * @test
+     */
+    public function stringNumbersReturnsAdd(){
+
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add("0,1,2,4");
+        $this->assertEquals("7", $result);
     }
 
 }
