@@ -13,15 +13,16 @@ class StringCalculator
 
             return '0';
         }
+        $tipicalSeparators = [',', '\n'];
 
         if (str_starts_with($stringNumbers, '//')) {
 
-           return $this->calculateAddWithOtherSeparator($stringNumbers);
+           return $this->calculateAddWithCustomSeparator($stringNumbers,$tipicalSeparators);
         }
 
-        if ($this->areThereInvalidSeparators($stringNumbers,',','\n')) {
+        if ($this->areThereUnexpectedSeparators($stringNumbers,',','\n')) {
 
-            return $this->errorMessageInInvalidSeparators($stringNumbers,',','\n');
+            return $this->errorMessageInUnexpectedSeparators($stringNumbers,',','\n');
 
         }
 
@@ -30,19 +31,19 @@ class StringCalculator
             return $this->errorMessageInMissingNumberInLastPosition();
         }
 
-        $delimiters = [',', '\n'];
-        return $this-> calculateAddWithSeparatorInTheString($stringNumbers, $delimiters);
+
+        return $this-> calculateAddWithSeparatorsInTheString($stringNumbers, $tipicalSeparators);
 
 
     }
 
-    private function calculateAddWithSeparatorInTheString(String $yourString, $delimiters):String{
-        if (is_array($delimiters)){
-            $stringNumbers = str_replace($delimiters, $delimiters[0], $yourString);
-            $splitNumbers = explode($delimiters[0],$stringNumbers);
+    private function calculateAddWithSeparatorsInTheString(String $yourString, $separators):String{
+        if (is_array($separators)){
+            $stringNumbers = str_replace($separators, $separators[0], $yourString);
+            $splitNumbers = explode($separators[0],$stringNumbers);
 
         }else{
-            $splitNumbers = explode($delimiters,$yourString);
+            $splitNumbers = explode($separators,$yourString);
         }
 
         $resultAdd = 0;
@@ -51,33 +52,63 @@ class StringCalculator
         }
         return strval($resultAdd);
     }
-    private function calculateAddWithOtherSeparator(String $yourString):String{
+
+    private function calculateAddWithCustomSeparator(String $yourString, $separators):String{
 
         $stringNumbers = substr($yourString, 2);
         $splitNumbers = explode('\n',$stringNumbers);
-        return $this->calculateAddWithSeparatorInTheString($splitNumbers[1], $splitNumbers[0]);
+
+        $invalidSeparatorText = $this->areThereTipicalSeparatorsInStringWithCustomSeparators($splitNumbers[1],$splitNumbers[0] ,$separators);
+
+        if ($invalidSeparatorText != "false"){
+
+            return $invalidSeparatorText ;
+        }
+
+        if ($this->isThereMissingNumberInLastPosition($stringNumbers,$splitNumbers[0])){
+
+            return $this->errorMessageInMissingNumberInLastPosition();
+        }
+        return $this->calculateAddWithSeparatorsInTheString($splitNumbers[1], $splitNumbers[0]);
 
     }
 
-    private function areThereInvalidSeparators(String $yourString, String $delimiter1, String $delimiter2){
-        return  (strstr($yourString, $delimiter1.$delimiter2) == true | strstr($yourString, $delimiter2.$delimiter1 ) == true);
+    private function areThereUnexpectedSeparators(String $yourString, String $separator1, String $separator2): bool{
+        return  (strstr($yourString, $separator1.$separator2) == true | strstr($yourString, $separator2.$separator1 ) == true);
+    }
+
+    private function areThereTipicalSeparatorsInStringWithCustomSeparators(String $yourString,String $customSeparator ,$separators):String{
+
+        foreach ($separators as $separator) {
+            if(strstr($yourString, $separator) == true) {
+
+
+                return $this->errorMessageInInvalidSeparatorsInCustomSeparator($yourString, $customSeparator, $separator);
+            }
+        }
+        return  "false";
     }
 
 
-    private function errorMessageInInvalidSeparators(String $yourString,String $delimiter1,String $delimiter2){
+    private function errorMessageInUnexpectedSeparators(String $yourString, String $separator1, String $separator2){
 
-        $wrongDelimiterPosition = strpos($yourString, $delimiter1.$delimiter2);
+        $wrongDelimiterPosition = strpos($yourString, $separator1.$separator2);
 
         if ( $wrongDelimiterPosition  === false){
 
-            $wrongDelimiterPosition  = strpos($yourString, $delimiter2.$delimiter1);
+            $wrongDelimiterPosition  = strpos($yourString, $separator2.$separator1);
             $wrongDelimiterPosition  += 1;
-            return "Number expected but '$delimiter1' found at position $wrongDelimiterPosition";
+            return "Number expected but '$separator1' found at position $wrongDelimiterPosition";
         }
 
         $wrongDelimiterPosition  += 1;
-        return "Number expected but '$delimiter2' found at position $wrongDelimiterPosition";
+        return "Number expected but '$separator2' found at position $wrongDelimiterPosition";
 
+    }
+    private function errorMessageInInvalidSeparatorsInCustomSeparator(String $yourString, String $customSeparator , String $invalidSeparator){
+
+        $wrongDelimiterPosition = strpos($yourString, $invalidSeparator);
+        return "'$customSeparator' expected but '$invalidSeparator' found at position $wrongDelimiterPosition";
     }
 
     private function isThereMissingNumberInLastPosition(String $yourString,String $separator){

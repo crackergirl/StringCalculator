@@ -77,6 +77,16 @@ final class StringCalculatorTest extends TestCase
         $this->assertEquals("7", $result);
     }
 
+    /**
+     * @test
+     */
+    public function stringNumbersWithInvalidSeparatorsInCustomSeparator(){
+
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('//;\n1;2,4');
+        $this->assertEquals("';' expected but ',' found at position 3", $result);
+    }
+
 
 
 }
