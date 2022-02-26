@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Deg540\PHPTestingBoilerplate;
 
 use function PHPUnit\Framework\isEmpty;
@@ -71,6 +71,15 @@ class StringCalculator
 
     }
 
+    function addReturnsIntNumber(String $stringNumbers){
+
+        $result = $this->add($stringNumbers);
+        if (!is_numeric($result)){
+            return  $result;
+        }
+        return intval($result);
+
+    }
     private function calculateAddWithSeparatorsInTheString(String $yourString, $separators):String{
 
         $stringNumbers = str_replace($separators, $separators[0], $yourString);
@@ -93,7 +102,7 @@ class StringCalculator
         return strval($resultAdd);
     }
 
-    private function areThereAnyUnexpectedSeparators(String $yourString, String $separator1, String $separator2): bool{
+    private function areThereAnyUnexpectedSeparators(String $yourString, String $separator1, String $separator2){
         return  (strstr($yourString, $separator1.$separator2) == true | strstr($yourString, $separator2.$separator1 ) == true);
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 namespace Deg540\PHPTestingBoilerplate\Test;
 
 use Deg540\PHPTestingBoilerplate\StringCalculator;
@@ -105,6 +106,16 @@ final class StringCalculatorTest extends TestCase
         $stringCalculator = new StringCalculator();
         $result = $stringCalculator->add('-1,,2');
         $this->assertEquals("Number expected but ',' found at position 3\nNegative not allowed : -1", $result);
+    }
+
+    /**
+     * @test
+     */
+    public function emptyStringReturnsIntZero(){
+
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->addReturnsIntNumber("");
+        $this->assertEquals(0, $result);
     }
 
 
