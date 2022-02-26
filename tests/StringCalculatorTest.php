@@ -25,6 +25,7 @@ final class StringCalculatorTest extends TestCase
 
         $stringCalculator = new StringCalculator();
         $result = $stringCalculator->add("1");
+
         $this->assertEquals("1", $result);
     }
 
@@ -94,6 +95,16 @@ final class StringCalculatorTest extends TestCase
         $stringCalculator = new StringCalculator();
         $result = $stringCalculator->add("0,-1,2,-4");
         $this->assertEquals('Negative not allowed : -1,-4', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function stringNumbersWithMultipleErrors(){
+
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('-1,,2');
+        $this->assertEquals("Number expected but ',' found at position 3\nNegative not allowed : -1", $result);
     }
 
 
