@@ -32,6 +32,7 @@ class StringCalculator
         }
 
 
+
         return $this-> calculateAddWithSeparatorsInTheString($stringNumbers, $tipicalSeparators);
 
 
@@ -47,8 +48,18 @@ class StringCalculator
         }
 
         $resultAdd = 0;
+        $negativeNumbers = "";
         foreach ($splitNumbers as $number) {
+            if (intval($number)< 0){
+                $negativeNumbers .= $number.",";
+
+            }
             $resultAdd += intval($number);
+        }
+
+        if ( $negativeNumbers != ""){
+            $negativeNumbers = substr($negativeNumbers,0,strlen($negativeNumbers) - 1);
+            return "Negative not allowed : ".$negativeNumbers;
         }
         return strval($resultAdd);
     }
@@ -57,19 +68,22 @@ class StringCalculator
 
         $stringNumbers = substr($yourString, 2);
         $splitNumbers = explode('\n',$stringNumbers);
+        $customSeparator = $splitNumbers[0];
+        $allSplitNumbers = array_slice($splitNumbers, 1);
+        $stringNumbers = implode($customSeparator , $allSplitNumbers );
 
-        $invalidSeparatorText = $this->areThereTipicalSeparatorsInStringWithCustomSeparators($splitNumbers[1],$splitNumbers[0] ,$separators);
+        $invalidSeparatorText = $this->areThereTipicalSeparatorsInStringWithCustomSeparators($stringNumbers, $customSeparator ,$separators);
 
         if ($invalidSeparatorText != "false"){
 
             return $invalidSeparatorText ;
         }
 
-        if ($this->isThereMissingNumberInLastPosition($stringNumbers,$splitNumbers[0])){
+        if ($this->isThereMissingNumberInLastPosition($stringNumbers, $customSeparator)){
 
             return $this->errorMessageInMissingNumberInLastPosition();
         }
-        return $this->calculateAddWithSeparatorsInTheString($splitNumbers[1], $splitNumbers[0]);
+        return $this->calculateAddWithSeparatorsInTheString($stringNumbers, $customSeparator);
 
     }
 

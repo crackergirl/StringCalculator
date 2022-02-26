@@ -86,6 +86,15 @@ final class StringCalculatorTest extends TestCase
         $result = $stringCalculator->add('//;\n1;2,4');
         $this->assertEquals("';' expected but ',' found at position 3", $result);
     }
+    /**
+     * @test
+     */
+    public function stringNumbersWithNegativeNumbers(){
+
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add("0,-1,2,-4");
+        $this->assertEquals('Negative not allowed : -1,-4', $result);
+    }
 
 
 
