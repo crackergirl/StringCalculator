@@ -37,5 +37,14 @@ final class StringCalculatorTest extends TestCase
         $result = $stringCalculator->add("0,1,2,4");
         $this->assertEquals("7", $result);
     }
+    /**
+     * @test
+     */
+    public function stringNumbersReturnsAddWithNewLineSeparator(){
+
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('0\n1,2,4');
+        $this->assertEquals("7", $result);
+    }
 
 }
