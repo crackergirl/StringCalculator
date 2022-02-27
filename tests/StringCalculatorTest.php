@@ -199,6 +199,15 @@ final class StringCalculatorTest extends TestCase
         $result = $stringCalculator->multiply();
         $this->assertEquals('Negative not allowed : -1,-4', $result);
     }
+    /**
+     * @test
+     */
+    public function stringNumbersWithMultipleErrorsinMultiply(){
+
+        $stringCalculator = new StringCalculator('-1,,2');
+        $result = $stringCalculator->multiply();
+        $this->assertEquals("Number expected but ',' found at position 3\nNegative not allowed : -1", $result);
+    }
 
 
 
