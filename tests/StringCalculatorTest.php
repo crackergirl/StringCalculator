@@ -163,6 +163,15 @@ final class StringCalculatorTest extends TestCase
         $delimiter = '\n';
         $this->assertEquals("Number expected but '$delimiter' found at position 4", $result);
     }
+    /**
+     * @test
+     */
+    public function missingNumberInLastPositioninMultiply(){
+
+        $stringCalculator = new StringCalculator('0,2,4,');
+        $result = $stringCalculator->multiply();
+        $this->assertEquals("Number expected but NOT found",$result);
+    }
 
 
 
