@@ -135,6 +135,15 @@ final class StringCalculatorTest extends TestCase
         $result = $stringCalculator->multiply();
         $this->assertEquals("8", $result);
     }
+    /**
+     * @test
+     */
+    public function stringNumbersReturnsMultiplyWithNewLineSeparator(){
+
+        $stringCalculator = new StringCalculator('1\n2,4');
+        $result = $stringCalculator->multiply();
+        $this->assertEquals("8", $result);
+    }
 
 
 
