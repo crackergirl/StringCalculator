@@ -54,16 +54,6 @@ class StringCalculator
 
 
 
-    function addReturnsIntNumber(string $stringWithNumbers){
-
-        $result = $this->add($stringWithNumbers);
-        if (!is_numeric($result)){
-            return  $result;
-        }
-        return intval($result);
-
-    }
-
 
 
 }

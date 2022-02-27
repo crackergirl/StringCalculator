@@ -110,25 +110,6 @@ final class StringCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function emptyStringReturnsIntZeroinAdd(){
-
-        $stringCalculator = new StringCalculator();
-        $result = $stringCalculator->addReturnsIntNumber("");
-        $this->assertEquals(0, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function stringNumbersWithMultipleErrorsInAddReturnsIntNumber(){
-
-        $stringCalculator = new StringCalculator();
-        $result = $stringCalculator->addReturnsIntNumber('-1,,2');
-        $this->assertEquals("Number expected but ',' found at position 3\nNegative not allowed : -1", $result);
-    }
-    /**
-     * @test
-     */
     public function stringOneReturnsOneinMultiply(){
 
         $stringCalculator = new StringCalculator();
