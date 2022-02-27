@@ -172,6 +172,15 @@ final class StringCalculatorTest extends TestCase
         $result = $stringCalculator->multiply();
         $this->assertEquals("Number expected but NOT found",$result);
     }
+    /**
+     * @test
+     */
+    public function stringNumbersReturnsMultiplyWithCustomSeparator(){
+
+        $stringCalculator = new StringCalculator('//;\n1;2;4');
+        $result = $stringCalculator->multiply();
+        $this->assertEquals("8", $result);
+    }
 
 
 
