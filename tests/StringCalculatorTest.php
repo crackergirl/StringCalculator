@@ -14,8 +14,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function emptyStringReturnsZeroinAdd(){
 
-        $stringCalculator = new StringCalculator("");
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add("");
         $this->assertEquals("0", $result);
     }
 
@@ -24,8 +24,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringOneReturnsOneinAdd(){
 
-        $stringCalculator = new StringCalculator("1");
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add("1");
         $this->assertEquals("1", $result);
     }
 
@@ -34,8 +34,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersReturnsAdd(){
 
-        $stringCalculator = new StringCalculator("0,1,2,4");
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add("0,1,2,4");
         $this->assertEquals("7", $result);
     }
     /**
@@ -43,8 +43,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersReturnsAddWithNewLineSeparator(){
 
-        $stringCalculator = new StringCalculator('0\n1,2,4');
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('0\n1,2,4');
         $this->assertEquals("7", $result);
     }
     /**
@@ -52,8 +52,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithInvalidSeparatorsinAdd(){
 
-        $stringCalculator = new StringCalculator('0,2,\n4');
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('0,2,\n4');
         $delimiter = '\n';
         $this->assertEquals("Number expected but '$delimiter' found at position 4", $result);
     }
@@ -63,8 +63,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function missingNumberInLastPositioninAdd(){
 
-        $stringCalculator = new StringCalculator('0,2,4,');
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('0,2,4,');
         $this->assertEquals("Number expected but NOT found",$result);
     }
 
@@ -73,8 +73,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersReturnsAddWithCustomSeparator(){
 
-        $stringCalculator = new StringCalculator('//;\n1;2;4');
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('//;\n1;2;4');
         $this->assertEquals("7", $result);
     }
 
@@ -83,8 +83,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithInvalidSeparatorsInCustomSeparatorinAdd(){
 
-        $stringCalculator = new StringCalculator('//;\n1;2,4');
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('//;\n1;2,4');
         $this->assertEquals("';' expected but ',' found at position 3", $result);
     }
     /**
@@ -92,8 +92,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithNegativeNumbersinAdd(){
 
-        $stringCalculator = new StringCalculator("0,-1,2,-4");
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add("0,-1,2,-4");
         $this->assertEquals('Negative not allowed : -1,-4', $result);
     }
 
@@ -102,8 +102,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithMultipleErrorsinAdd(){
 
-        $stringCalculator = new StringCalculator('-1,,2');
-        $result = $stringCalculator->add();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->add('-1,,2');
         $this->assertEquals("Number expected but ',' found at position 3\nNegative not allowed : -1", $result);
     }
 
@@ -112,8 +112,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function emptyStringReturnsIntZeroinAdd(){
 
-        $stringCalculator = new StringCalculator("");
-        $result = $stringCalculator->addReturnsIntNumber();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->addReturnsIntNumber("");
         $this->assertEquals(0, $result);
     }
 
@@ -122,8 +122,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithMultipleErrorsInAddReturnsIntNumber(){
 
-        $stringCalculator = new StringCalculator('-1,,2');
-        $result = $stringCalculator->addReturnsIntNumber();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->addReturnsIntNumber('-1,,2');
         $this->assertEquals("Number expected but ',' found at position 3\nNegative not allowed : -1", $result);
     }
     /**
@@ -131,8 +131,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringOneReturnsOneinMultiply(){
 
-        $stringCalculator = new StringCalculator("1");
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply("1");
         $this->assertEquals("1", $result);
     }
     /**
@@ -140,8 +140,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersReturnsMultiply(){
 
-        $stringCalculator = new StringCalculator("1,2,4");
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply("1,2,4");
         $this->assertEquals("8", $result);
     }
     /**
@@ -149,8 +149,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersReturnsMultiplyWithNewLineSeparator(){
 
-        $stringCalculator = new StringCalculator('1\n2,4');
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply('1\n2,4');
         $this->assertEquals("8", $result);
     }
     /**
@@ -158,8 +158,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithInvalidSeparatorsinMultiply(){
 
-        $stringCalculator = new StringCalculator('0,2,\n4');
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply('0,2,\n4');
         $delimiter = '\n';
         $this->assertEquals("Number expected but '$delimiter' found at position 4", $result);
     }
@@ -168,8 +168,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function missingNumberInLastPositioninMultiply(){
 
-        $stringCalculator = new StringCalculator('0,2,4,');
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply('0,2,4,');
         $this->assertEquals("Number expected but NOT found",$result);
     }
     /**
@@ -177,8 +177,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersReturnsMultiplyWithCustomSeparator(){
 
-        $stringCalculator = new StringCalculator('//;\n1;2;4');
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply('//;\n1;2;4');
         $this->assertEquals("8", $result);
     }
     /**
@@ -186,8 +186,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithInvalidSeparatorsInCustomSeparatorinMultiply(){
 
-        $stringCalculator = new StringCalculator('//;\n1;2,4');
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply('//;\n1;2,4');
         $this->assertEquals("';' expected but ',' found at position 3", $result);
     }
     /**
@@ -195,8 +195,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithNegativeNumbersinMultiply(){
 
-        $stringCalculator = new StringCalculator("0,-1,2,-4");
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply("0,-1,2,-4");
         $this->assertEquals('Negative not allowed : -1,-4', $result);
     }
     /**
@@ -204,8 +204,8 @@ final class StringCalculatorTest extends TestCase
      */
     public function stringNumbersWithMultipleErrorsinMultiply(){
 
-        $stringCalculator = new StringCalculator('-1,,2');
-        $result = $stringCalculator->multiply();
+        $stringCalculator = new StringCalculator();
+        $result = $stringCalculator->multiply('-1,,2');
         $this->assertEquals("Number expected but ',' found at position 3\nNegative not allowed : -1", $result);
     }
 
