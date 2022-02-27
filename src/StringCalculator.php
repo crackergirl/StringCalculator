@@ -2,104 +2,154 @@
 declare(strict_types=1);
 namespace Deg540\PHPTestingBoilerplate;
 
+use phpDocumentor\Reflection\Types\Integer;
 use function PHPUnit\Framework\isEmpty;
 
 class StringCalculator
 {
 
-    function add(String $stringNumbers):String{
+    private string $stringNumbers;
+    private array $tipicalSeparators;
+    private String $customSeparator;
 
-        if ($stringNumbers == "") {
+
+    public function __construct(string $stringNumbers)
+    {
+        if($this->containsTheSeparator($stringNumbers)) {
+            list($this->customSeparator, $this->stringNumbers) = explode('\n',substr($stringNumbers, 2));
+
+        } else {
+            $this->stringNumbers = $stringNumbers;
+            $this->customSeparator = "";
+
+        }
+        $this->tipicalSeparators = array(',','\n');
+
+    }
+
+    public function add():string{
+
+        if ($this->stringNumbers == "") {
 
             return '0';
         }
 
-        $tipicalSeparators = array(',','\n');
-        $errorsText = "";
-        $areNotThereErrors = true;
+        $errorsText = $this->multipleErrors();
+        if ($errorsText != ""){
 
-        if (str_starts_with($stringNumbers, '//')) {
-
-            $stringNumbersWithSeparator = substr($stringNumbers, 2);
-            $splitNumbersWithSeparator = explode('\n',$stringNumbersWithSeparator);
-            $customSeparator = $splitNumbersWithSeparator[0];
-            $stringNumbers = $splitNumbersWithSeparator[1];
-
-            $invalidSeparatorText = $this->areThereAnyTipicalSeparatorInStringWithCustomSeparators($stringNumbers, $customSeparator ,$tipicalSeparators[0]);
-            if ($invalidSeparatorText != "false"){
-
-                $errorsText .= $invalidSeparatorText."\n";
-                $areNotThereErrors = false;
-                return $invalidSeparatorText ;
-            }
-            $tipicalSeparators[0] = $customSeparator;
-
+            return rtrim($errorsText);
         }
 
-        $numberOfSeparators = count($tipicalSeparators);
-        for ( $separator1= 0;$separator1< $numberOfSeparators; ++$separator1){
-            for ($separator2 = $separator1; $separator2 < $numberOfSeparators; ++$separator2){
-
-                if ($this->areThereAnyUnexpectedSeparators($stringNumbers,$tipicalSeparators[$separator1],$tipicalSeparators[$separator2])) {
-
-                    $result = $this->errorMessageInUnexpectedSeparators($stringNumbers,$tipicalSeparators[$separator1],$tipicalSeparators[$separator2]);
-                    $areNotThereErrors = false;
-                    $errorsText .= $result."\n";
-
-                }
-
-            }
+        $intNumbers = ($this->customSeparator != "" ?
+            $this->getIntegers($this->stringNumbers, array($this->customSeparator,'\n')) :
+            $this->getIntegers($this->stringNumbers, $this->tipicalSeparators));
 
 
-        }
-
-        if ($this->isThereMissingNumberInLastPosition($stringNumbers,$tipicalSeparators[0])){
-            $result = $this->errorMessageInMissingNumberInLastPosition();
-            $areNotThereErrors = false;
-            $errorsText .= $result."\n";
-        }
-
-        $result = $this-> calculateAddWithSeparatorsInTheString($stringNumbers, $tipicalSeparators);
-        if (is_numeric($result) && $areNotThereErrors ){
-            return strval($result);
-        }
-        if (!is_numeric($result)){
-            $errorsText .= $result."\n";
-        }
-
-        return rtrim($errorsText);
+        return strval(array_sum($intNumbers));
 
     }
 
-    function addReturnsIntNumber(String $stringNumbers){
+    public function multiply():string{
 
-        $result = $this->add($stringNumbers);
+        if ($this->stringNumbers == "") {
+
+            return '0';
+        }
+
+        $errorsText = $this->multipleErrors();
+        if ($errorsText != ""){
+
+            return rtrim($errorsText);
+        }
+
+        $intNumbers = ($this->customSeparator != "" ?
+            $this->getIntegers($this->stringNumbers, array($this->customSeparator,'\n')) :
+            $this->getIntegers($this->stringNumbers, $this->tipicalSeparators));
+
+
+        return strval(array_product($intNumbers));
+
+    }
+
+
+
+    function addReturnsIntNumber(){
+
+        $result = $this->add($this->stringNumbers);
         if (!is_numeric($result)){
             return  $result;
         }
         return intval($result);
 
     }
-    private function calculateAddWithSeparatorsInTheString(String $yourString, $separators):String{
+
+    private function multipleErrors():String{
+
+        $errorsText = "";
+        $auxTipicalSeparators = $this->tipicalSeparators;
+        if ($this->customSeparator != ""){
+            $invalidSeparatorText = $this->areThereAnyTipicalSeparatorInStringWithCustomSeparators($this->stringNumbers, $this->customSeparator ,$this->tipicalSeparators[0]);
+            if ($invalidSeparatorText != "false"){
+                $errorsText .= $invalidSeparatorText."\n";
+            }
+            $auxTipicalSeparators[0]= $this->customSeparator;
+        }
+
+        $numberOfSeparators = count($auxTipicalSeparators);
+
+        for ( $separator1= 0;$separator1< $numberOfSeparators; ++$separator1){
+            for ($separator2 = $separator1; $separator2 < $numberOfSeparators; ++$separator2){
+                if ($this->areThereAnyUnexpectedSeparators($this->stringNumbers,$auxTipicalSeparators[$separator1],$auxTipicalSeparators[$separator2])) {
+                    $result = $this->errorMessageInUnexpectedSeparators($this->stringNumbers,$auxTipicalSeparators[$separator1],$auxTipicalSeparators[$separator2]);
+                    $errorsText .= $result."\n";
+                }
+            }
+        }
+        if ($this->isThereMissingNumberInLastPosition($this->stringNumbers,$auxTipicalSeparators[0])){
+            $result = $this->errorMessageInMissingNumberInLastPosition();
+            $errorsText .= $result."\n";
+        }
+
+        $intNumbers = $this-> getIntegers($this->stringNumbers, $auxTipicalSeparators);
+        $negativeNumbers = $this->obtainNegativeNumbers($intNumbers);
+
+        if ($this->areThereAnyNegativeNumber($negativeNumbers)){
+
+            $result = $this->errorMessageInNegativeNumbers($negativeNumbers);
+
+            $errorsText .= $result."\n";
+        }
+
+        return $errorsText;
+    }
+
+    private function getIntegers(String $yourString, $separators):array{
 
         $stringNumbers = str_replace($separators, $separators[0], $yourString);
-        $splitNumbers = explode($separators[0],$stringNumbers);
+        return array_map('intval', explode($separators[0],$stringNumbers));
+    }
 
-        $resultAdd = 0;
-        $negativeNumbers = "";
-        foreach ($splitNumbers as $number) {
-            if (intval($number)< 0){
-                $negativeNumbers .= $number.",";
+    private function containsTheSeparator(String $yourString): bool{
 
+        return str_starts_with($yourString, '//');
+    }
+
+    private function obtainNegativeNumbers(array $numbers): array{
+
+        $negativeNumbers = array_filter(
+            $numbers,
+            function($number) {
+                return $number < 0;
             }
-            $resultAdd += intval($number);
-        }
+        );
 
-        if ( $negativeNumbers != ""){
-            $negativeNumbers = substr($negativeNumbers,0,strlen($negativeNumbers) - 1);
-            return "Negative not allowed : ".$negativeNumbers;
-        }
-        return strval($resultAdd);
+        return $negativeNumbers;
+
+    }
+
+    private function areThereAnyNegativeNumber(array $negativeNumbers): bool{
+
+        return count($negativeNumbers) > 0;
     }
 
     private function areThereAnyUnexpectedSeparators(String $yourString, String $separator1, String $separator2){
@@ -114,6 +164,10 @@ class StringCalculator
         }
 
         return  "false";
+    }
+
+    private function errorMessageInNegativeNumbers(array $negativeNumbers):String{
+        return  sprintf('Negative not allowed : %s', implode(',', $negativeNumbers));
     }
 
 
