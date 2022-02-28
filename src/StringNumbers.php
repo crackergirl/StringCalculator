@@ -35,27 +35,24 @@ class StringNumbers
         }
 
         $numberOfSeparators = count($auxTipicalSeparators);
-
         for ( $separator1= 0;$separator1< $numberOfSeparators; ++$separator1){
             for ($separator2 = $separator1; $separator2 < $numberOfSeparators; ++$separator2){
-                if ($this->areThereAnyUnexpectedSeparators($this->stringNumbers,$auxTipicalSeparators[$separator1],$auxTipicalSeparators[$separator2])) {
-                    $result = $this->errorMessageInUnexpectedSeparators($this->stringNumbers,$auxTipicalSeparators[$separator1],$auxTipicalSeparators[$separator2]);
+                if ($this->areThereTwoSeparatorsTogether($this->stringNumbers,$auxTipicalSeparators[$separator1],$auxTipicalSeparators[$separator2])) {
+                    $result = $this->errorMessageInAreThereTwoSeparatorsTogether($this->stringNumbers,$auxTipicalSeparators[$separator1],$auxTipicalSeparators[$separator2]);
                     $errorsText .= $result."\n";
                 }
             }
         }
+
         if ($this->isThereMissingNumberInLastPosition($this->stringNumbers,$auxTipicalSeparators[0])){
             $result = $this->errorMessageInMissingNumberInLastPosition();
             $errorsText .= $result."\n";
         }
 
-        $intNumbers = $this-> getIntegers($this->stringNumbers);
+        $intNumbers = $this-> getIntegers();
         $negativeNumbers = $this->obtainNegativeNumbers($intNumbers);
-
         if ($this->areThereAnyNegativeNumber($negativeNumbers)){
-
             $result = $this->errorMessageInNegativeNumbers($negativeNumbers);
-
             $errorsText .= $result."\n";
         }
 
@@ -86,13 +83,18 @@ class StringNumbers
         return $negativeNumbers;
 
     }
+    private function isThereMissingNumberInLastPosition(String $yourString,String $separator){
+
+        $lastChar = $yourString[-1];
+        return  ( $lastChar == $separator);
+    }
 
     private function areThereAnyNegativeNumber(array $negativeNumbers): bool{
 
         return count($negativeNumbers) > 0;
     }
 
-    private function areThereAnyUnexpectedSeparators(String $yourString, String $separator1, String $separator2){
+    private function areThereTwoSeparatorsTogether(String $yourString, String $separator1, String $separator2){
         return  (strstr($yourString, $separator1.$separator2) == true | strstr($yourString, $separator2.$separator1 ) == true);
     }
 
@@ -110,9 +112,18 @@ class StringNumbers
         return  sprintf('Negative not allowed : %s', implode(',', $negativeNumbers));
     }
 
+    private function errorMessageInInvalidSeparatorsInCustomSeparator(String $yourString, String $customSeparator , String $invalidSeparator){
 
-    private function errorMessageInUnexpectedSeparators(String $yourString, String $separator1, String $separator2){
+        $wrongDelimiterPosition = strpos($yourString, $invalidSeparator);
+        return "'$customSeparator' expected but '$invalidSeparator' found at position $wrongDelimiterPosition";
+    }
 
+    private function errorMessageInMissingNumberInLastPosition(){
+
+        return "Number expected but NOT found";
+    }
+
+    private function errorMessageInAreThereTwoSeparatorsTogether(String $yourString, String $separator1, String $separator2){
 
         $wrongDelimiterPosition = strpos($yourString, $separator1.$separator2);
 
@@ -126,21 +137,6 @@ class StringNumbers
         $wrongDelimiterPosition  += 1;
         return "Number expected but '$separator2' found at position $wrongDelimiterPosition";
 
-    }
-    private function errorMessageInInvalidSeparatorsInCustomSeparator(String $yourString, String $customSeparator , String $invalidSeparator){
-
-        $wrongDelimiterPosition = strpos($yourString, $invalidSeparator);
-        return "'$customSeparator' expected but '$invalidSeparator' found at position $wrongDelimiterPosition";
-    }
-
-    private function isThereMissingNumberInLastPosition(String $yourString,String $separator){
-
-        $lastChar = $yourString[-1];
-        return  ( $lastChar == $separator);
-    }
-    private function errorMessageInMissingNumberInLastPosition(){
-
-        return "Number expected but NOT found";
     }
 
 }
